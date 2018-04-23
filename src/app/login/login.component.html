@@ -1,0 +1,8 @@
+<h1>
+    Login form
+</h1>
+<form action="" class="form-horizontal">
+    <p><strong>Login:</strong><input type="text" class="form-control" [(ngModel)]="credentials.name" name="login"></p>
+    <p><strong>Password:</strong><input type="password" class="form-control" [(ngModel)]="credentials.password" name="password" ></p>
+    <button class="btn btn-primary"(click)="login()">Login</button>
+</form>
