@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
@@ -7,26 +7,26 @@ import 'rxjs/add/observable/of';
 @Injectable()
 export class AuthService {
 
-    constructor(private http: HttpClient) {
-    }
-
     private isLogged: boolean | null = null;
 
+    constructor(private  http: HttpClient) {
+    }
+
     login(credentials): Observable<boolean> {
-        const data: string = JSON.stringify(credentials);
-        const params = {action: 'login'};
+        const data = JSON.stringify(credentials);
+        const params = new HttpParams().set('action', 'login');
         return this.http.post('assets/php/auth.php', data, {params: params})
-            .map((r: Response) => {
-                this.isLogged = (r.status === 1);
+            .map((res: Response) => {
+                this.isLogged = (res.status === 1);
                 return this.isLogged;
             });
     }
 
     logout(): Observable<boolean> {
-        const params = {action: 'logout'};
+        const params = new HttpParams().set('action', 'logout');
         return this.http.get('assets/php/auth.php', {params: params})
-            .map((r: Response) => {
-                if (r.status === 1) {
+            .map((res: Response) => {
+                if (res.status === 1) {
                     this.isLogged = false;
                 }
                 return this.isLogged;
@@ -35,15 +35,16 @@ export class AuthService {
 
     getIsLogged(): Observable<boolean> {
         if (this.isLogged === null) {
-            const params = {action: 'logout'};
+            const params = new HttpParams().set('action', 'check');
             return this.http.get('assets/php/auth.php', {params: params})
-                .map((r: Response) => {
-                    this.isLogged = (r.status === 1);
+                .map((res: Response) => {
+                    this.isLogged = (res.status === 1);
                     return this.isLogged;
                 });
         } else {
-          return Observable.of(this.isLogged);
+            return Observable.of(this.isLogged);
         }
     }
+
 
 }

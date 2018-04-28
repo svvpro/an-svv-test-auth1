@@ -17,7 +17,6 @@ export class LogoutComponent implements OnInit {
 
     logout(): void {
         this.as.logout().subscribe((flag: boolean) => {
-            console.log('Log out:', flag);
             if (!(flag)) {
                 this.router.navigate(['/news']);
             }
